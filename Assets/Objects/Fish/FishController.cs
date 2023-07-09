@@ -212,8 +212,7 @@ public class FishController : MonoBehaviour
             fishHP -= collision.GetComponent<Web>().Damage;
             Destroy(collision.gameObject);
             screenFlash.SetTrigger("FlashRed");
-        }
-    }
+        }    }
 
     void Shake()
     {
