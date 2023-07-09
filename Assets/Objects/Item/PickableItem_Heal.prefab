@@ -135,4 +135,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   boosterTime: 0
-  boosterAmount: 1
+  boosterAmount: 30
+  existTime: 10

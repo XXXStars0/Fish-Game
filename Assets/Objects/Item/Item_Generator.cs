@@ -10,9 +10,11 @@ public class Item_Generator : MonoBehaviour
     public float spawnInterval = 5f;
 
     [SerializeField] float timer;
+    GameObject fish;
     void Start()
     {
-        timer = spawnInterval;
+        timer = 0;
+        fish = GameObject.Find("Fish");
     }
 
     private void Update()
@@ -22,13 +24,16 @@ public class Item_Generator : MonoBehaviour
         {
             timer = spawnInterval;
             SpawnRandomItem();
+            SpawnRandomItem();
         }
     }
 
     void SpawnRandomItem()
     {
-        float randomX = Random.Range(-spawnRange.x, spawnRange.x);
-        float randomY = Random.Range(-spawnRange.y, spawnRange.y);
+        float fishX = fish.transform.position.x;
+        float fishY = fish.transform.position.y;
+        float randomX = Random.Range(-spawnRange.x+ fishX, spawnRange.x+ fishX);
+        float randomY = Random.Range(-spawnRange.y+ fishY, spawnRange.y+ fishY);
         Vector2 spawnPosition = new Vector2(randomX, randomY) + (Vector2)transform.position;
 
         GameObject randomItemPrefab = itemPrefabs[Random.Range(0, itemPrefabs.Length)];

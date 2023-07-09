@@ -37,7 +37,12 @@ public class BoatController : MonoBehaviour
             {
                 randomDirection = avoidanceDirection;
                 isCollide = false;
-            } else
+            }
+            else if (transform.position.x <= -20 || transform.position.x >= 20 || transform.position.y > 10 || transform.position.y < -10)
+            {
+                randomDirection = -(transform.position - new Vector3(0, 0, 0));
+            }
+            else
             {
                 randomDirection = GetRandomDirection();
             }
@@ -48,8 +53,10 @@ public class BoatController : MonoBehaviour
         // Rotate the boat to face the movement direction
         if (randomDirection != Vector2.zero)
         {
-            float angle = Mathf.Atan2(randomDirection.y, randomDirection.x) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                float angle = Mathf.Atan2(randomDirection.y, randomDirection.x) * Mathf.Rad2Deg;
+                Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
         }
 
