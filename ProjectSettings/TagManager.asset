@@ -7,6 +7,7 @@ TagManager:
   - BoatCheck
   - BoundaryStone
   - PickableItem
+  - Web
   layers:
   - Default
   - TransparentFX

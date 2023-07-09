@@ -27,21 +27,25 @@ public class EnemyDir : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 direction = boat.position - fish.position;
-        Debug.Log(direction);
-        direction.Normalize();
-
-        float distance = Vector2.Distance(boat.position, fish.position);
-
-        if (distance <= hideDistance)
+        if (boat!=null && fish!=null)
         {
-            pointer.SetActive(false);
-        }
-        else
-        {
-            pointer.SetActive(true);
-            float angle = Mathf.Atan2(-direction.x, direction.y) * Mathf.Rad2Deg;
-            pointer.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            Vector2 direction = boat.position - fish.position;
+
+            direction.Normalize();
+
+            float distance = Vector2.Distance(boat.position, fish.position);
+
+            if (distance <= hideDistance)
+            {
+                pointer.SetActive(false);
+            }
+            else
+            {
+                pointer.SetActive(true);
+                float angle = Mathf.Atan2(-direction.x, direction.y) * Mathf.Rad2Deg;
+                pointer.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+            }
 
         }
     }

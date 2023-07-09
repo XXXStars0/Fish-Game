@@ -23,13 +23,5 @@ public class Web : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.GetComponent<FishController>())
-        {
-            Debug.Log("Caught");
-            collision.GetComponent<FishController>().fishHP -= Damage;
-        }
-    }
 
 }

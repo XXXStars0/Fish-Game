@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BoatController : MonoBehaviour
 {
     [SerializeField] float boatSpeed = 1f;
@@ -17,15 +17,24 @@ public class BoatController : MonoBehaviour
     Vector2 avoidanceDirection;
     bool isCollide = false;
 
+    [SerializeField] public Slider HPBar;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         randomDirection = GetRandomDirection();
         changeDirectionTime = Random.Range(1f, 3f);
+
+        //UI Connection
+        HPBar = GameObject.Find("Boat_HP").GetComponent<Slider>();
+
+        HPBar.maxValue = boatMaxHP;
+        HPBar.value = boatHP;
     }
 
     private void Update()
     {
+        HPBar.value = boatHP;
         DyingCheck();
         // Update the timer to change direction
         changeDirectionTime -= Time.deltaTime;
@@ -78,7 +87,6 @@ public class BoatController : MonoBehaviour
         //DIscover and avoid fish
         if (collision.gameObject.GetComponent<FishController>())
         {
-            Debug.Log("Discover!");
             isCollide = true;
             changeDirectionTime = 0;
 
