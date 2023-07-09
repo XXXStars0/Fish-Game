@@ -66,7 +66,7 @@ public class FishController : MonoBehaviour
         controller();
         Shake();
         DyingCheck();
-        abilityBoost();
+        //abilityBoost();
     }
 
     void abilityBoost()
