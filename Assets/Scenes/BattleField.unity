@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85ed901b4a52eca44839726bc53682bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishSpeed: 0
+  fishSpeed: 2
   rotateSpeed: 48
   fishHP: 50
   fishMaxHP: 50
