@@ -4,6 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Cinemachine;
+using UnityEngine.UI;
+using TMPro;
 
 public class FishController : MonoBehaviour
 {
@@ -39,6 +41,16 @@ public class FishController : MonoBehaviour
     public float powBoost;
     public float rotBoost;
 
+    [Header("UI Control")]
+    [SerializeField] public Slider HPBar;
+    [SerializeField] TMP_Text SLV;
+    [SerializeField] TMP_Text RLV;
+    [SerializeField] TMP_Text PLV;
+    [SerializeField] Animator screenFlash;
+
+    int speedLV = 0;
+    int rotateLV = 0;
+    int attackLV = 0;
     void Start()
     {
         //get RIgid body
@@ -58,7 +70,24 @@ public class FishController : MonoBehaviour
         baseSpeed = fishSpeed;
         basePow = fishAP;
         baseRotate = rotateSpeed;
-}
+
+        //UI Connection
+        HPBar = GameObject.Find("Fish_HP").GetComponent<Slider>();
+
+        HPBar.maxValue = fishMaxHP;
+        HPBar.value = fishHP;
+
+        speedLV = 0;
+        rotateLV = 0;
+        attackLV = 0;
+
+        SLV = GameObject.Find("Text_SpeedLV").GetComponent<TMP_Text>();
+        RLV = GameObject.Find("Text_RotLV").GetComponent<TMP_Text>();
+        PLV = GameObject.Find("Text_AtkLV").GetComponent<TMP_Text>();
+        setUITexts();
+
+        screenFlash = GameObject.Find("Panel_MainUI").GetComponent<Animator>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -66,7 +95,16 @@ public class FishController : MonoBehaviour
         controller();
         Shake();
         DyingCheck();
+        setUITexts();
         //abilityBoost();
+        HPBar.value = fishHP;
+    }
+
+    private void setUITexts()
+    {
+        SLV.text = "SPD LV:" + speedLV.ToString();
+        RLV.text = "ROT LV:" + rotateLV.ToString();
+        PLV.text = "ATK LV:" + attackLV.ToString();
     }
 
     void abilityBoost()
@@ -123,14 +161,12 @@ public class FishController : MonoBehaviour
             //Check Boat
             GameObject.Find("Boat").GetComponent<BoatController>().boatHP -= fishAP;
             startShake = true;
-            Debug.Log("Attacked Boat!");
         }
         //Collide Stone
         if (collision.CompareTag("BoundaryStone"))
         {
             //TO DO: FIsh cannot reach boundary
             fishHP = 0;
-            Debug.Log("Fish Reaches Boundary!");
             //fishHP = 0;
         }
         //Boost Item
@@ -139,16 +175,19 @@ public class FishController : MonoBehaviour
             switch (collision.gameObject.GetComponent<Pickable>().type)
             {
                 case 1:
+                    speedLV += 1;
                     spdBoost = collision.gameObject.GetComponent<Pickable>().boosterTime;
                     fishSpeed += collision.gameObject.GetComponent<Pickable>().boosterAmount;
                     break;
 
                 case 2:
+                    rotateLV += 1;
                     rotBoost = collision.gameObject.GetComponent<Pickable>().boosterTime;
                     rotateSpeed += collision.gameObject.GetComponent<Pickable>().boosterAmount;
                     break;
 
                 case 3:
+                    attackLV += 1;
                     powBoost = collision.gameObject.GetComponent<Pickable>().boosterTime;
                     fishAP += (int)collision.gameObject.GetComponent<Pickable>().boosterAmount;
                     break;
@@ -166,6 +205,13 @@ public class FishController : MonoBehaviour
                     break;
             }
             Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("Web"))
+        {
+            fishHP -= collision.GetComponent<Web>().Damage;
+            Destroy(collision.gameObject);
+            screenFlash.SetTrigger("FlashRed");
         }
     }
 
